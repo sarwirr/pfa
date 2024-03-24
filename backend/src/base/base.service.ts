@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model, ObjectId } from 'mongoose';
 
 type Criteria<T> = FilterQuery<T>;
 
 @Injectable()
-export class BaseService<T extends Document> {
+export class BaseService<T extends any> {
     constructor(
-        private BaseModel: Model<T>,
+        @Inject('PharmacyModel') private BaseModel: Model<T>,
         ){}
     
 
