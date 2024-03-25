@@ -7,11 +7,6 @@ import { UpdatePharmacyDto } from './dto/update-pharmacy.dto';
 export class PharmacyController {
   constructor(private readonly pharmacyService: PharmacyService) {}
 
-  @Post()
-  create(@Body() createPharmacyDto: CreatePharmacyDto) {
-    return this.pharmacyService.create(createPharmacyDto);
-  }
-
   @Get()
   findAll() {
     return this.pharmacyService.findAll();
@@ -19,16 +14,16 @@ export class PharmacyController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.pharmacyService.findOne(+id);
+    return this.pharmacyService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePharmacyDto: UpdatePharmacyDto) {
-    return this.pharmacyService.update(+id, updatePharmacyDto);
+    return this.pharmacyService.update(id, updatePharmacyDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.pharmacyService.remove(+id);
+    return this.pharmacyService.remove(id);
   }
 }

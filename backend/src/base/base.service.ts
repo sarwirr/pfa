@@ -14,7 +14,7 @@ export class BaseService<T extends any> {
         return await this.BaseModel.find();
     }
 
-    async findById(id:ObjectId): Promise<T[]|null>{
+    async findById(id:string): Promise<T[]|null>{
         return await this.BaseModel.findById(id);
     }
 
@@ -22,7 +22,7 @@ export class BaseService<T extends any> {
         return (await this.BaseModel.findOne(criteria).exec());
     }
 
-    async deleteById(id:ObjectId):Promise<T | null>{
+    async deleteById(id:string):Promise<T | null>{
         return (await this.BaseModel.findByIdAndDelete(id).exec())    
     }
     
