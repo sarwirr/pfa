@@ -15,7 +15,7 @@ export class PharmacyService extends BaseService<Pharmacy>{
   }
 
   findAll() {
-    return 'all works well';
+    return this.getAll();
   }
 
   findOne(id: string) {
