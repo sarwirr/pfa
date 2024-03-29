@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import {
   AuthenticationDetails,
   CognitoUser,
-  CognitoUserAttribute,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
-import { AuthLoginUserDto } from './auth-login.dto';
+import { AuthLoginUserDto } from '../dto/auth-login.dto';
+import { AuthRegisterUserDto } from '../dto/auth-registration.dto';
 
 @Injectable()
 export class AwsCognitoService {
@@ -47,4 +47,24 @@ export class AwsCognitoService {
       });
     });
   }
+
+  async registerUser(authRegisterUserDto: AuthRegisterUserDto) {
+    const { name,email, password,phone_number,address } = authRegisterUserDto;
+    return new Promise((resolve, reject) => {
+      this.userPool.signUp(
+        email,
+        password,
+        null,
+        null,
+        (err, result) => {
+          if (!result) {
+            reject(err);
+          } else {
+            resolve(result.user);
+          }
+        },
+      );
+    });
+  }
+
 }

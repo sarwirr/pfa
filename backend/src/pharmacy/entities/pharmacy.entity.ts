@@ -18,11 +18,11 @@ export class Pharmacy {
     @Prop()
     phone: string;
 
-    @Prop()
-    email: string;
+    // @Prop()
+    // email: string;
 
-    @Prop({ required: true })
-    password: string;
+    // @Prop({ required: true })
+    // password: string;
 
 
 }
