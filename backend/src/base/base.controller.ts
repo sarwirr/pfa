@@ -15,7 +15,7 @@ export class BaseController<T extends Document> {
     }
 
     @Get(':id')
-    async findById(@Param('id') id: ObjectId): Promise<T[] | null> {
+    async findById(@Param('id') id: string): Promise<T[] | null> {
         return await this.baseService.findById(id);
     }
 
@@ -25,7 +25,7 @@ export class BaseController<T extends Document> {
     }
 
     @Delete(':id')
-    async deleteById(@Param('id') id: ObjectId): Promise<T | null> {
+    async deleteById(@Param('id') id: string): Promise<T | null> {
         return await this.baseService.deleteById(id);
     }
 }

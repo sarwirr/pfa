@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { FilterQuery, Model, ObjectId } from 'mongoose';
 
 type Criteria<T> = FilterQuery<T>;
 
 @Injectable()
-export class BaseService<T extends Document> {
+export class BaseService<T extends any> {
     constructor(
-        private BaseModel: Model<T>,
+        @Inject('PharmacyModel') private BaseModel: Model<T>,
         ){}
     
 
@@ -14,7 +14,7 @@ export class BaseService<T extends Document> {
         return await this.BaseModel.find();
     }
 
-    async findById(id:ObjectId): Promise<T[]|null>{
+    async findById(id:string): Promise<T[]|null>{
         return await this.BaseModel.findById(id);
     }
 
@@ -22,7 +22,7 @@ export class BaseService<T extends Document> {
         return (await this.BaseModel.findOne(criteria).exec());
     }
 
-    async deleteById(id:ObjectId):Promise<T | null>{
+    async deleteById(id:string):Promise<T | null>{
         return (await this.BaseModel.findByIdAndDelete(id).exec())    
     }
     
