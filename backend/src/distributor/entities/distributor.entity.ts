@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type PharmacyDocument = Pharmacy & Document;
+export type DistributorDocument = Distributor & Document;
 
 @Schema()
-export class Pharmacy {
+export class Distributor {
   _id;
 
   @Prop({ required: true, unique: true })
@@ -22,6 +22,6 @@ export class Pharmacy {
   clientId: string;
 }
 
-const PharmacySchema = SchemaFactory.createForClass(Pharmacy);
+const DistributorSchema = SchemaFactory.createForClass(Distributor);
 
-export { PharmacySchema };
+export { DistributorSchema };
