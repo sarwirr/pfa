@@ -9,21 +9,18 @@ import { AuthRegisterUserDto } from '../dto/auth-registration.dto';
 
 @Injectable()
 export class AwsCognitoService {
-  private userPool: CognitoUserPool;
-
   constructor() {
-    this.userPool = new CognitoUserPool({
-      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      ClientId: process.env.AWS_COGNITO_CLIENT_ID,
-    });
   }
 
-
-  async authenticateUser(authLoginUserDto: AuthLoginUserDto) {
+  async authenticateUser(
+    authLoginUserDto: AuthLoginUserDto,
+    userPool: CognitoUserPool,
+  ) {
     const { email, password } = authLoginUserDto;
     const userData = {
       Username: email,
-      Pool: this.userPool,
+      Pool: userPool,
+
     };
 
     const authenticationDetails = new AuthenticationDetails({
@@ -36,7 +33,8 @@ export class AwsCognitoService {
     return new Promise((resolve, reject) => {
       userCognito.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-         resolve({
+          resolve({
+
             accessToken: result.getAccessToken().getJwtToken(),
             refreshToken: result.getRefreshToken().getToken(),
           });
@@ -48,23 +46,20 @@ export class AwsCognitoService {
     });
   }
 
-  async registerUser(authRegisterUserDto: AuthRegisterUserDto) {
-    const { name,email, password,phone_number,address } = authRegisterUserDto;
+  async registerUser(
+    authRegisterUserDto: AuthRegisterUserDto,
+    userPool: CognitoUserPool,
+  ) {
+    const { email, password } = authRegisterUserDto;
     return new Promise((resolve, reject) => {
-      this.userPool.signUp(
-        email,
-        password,
-        null,
-        null,
-        (err, result) => {
-          if (!result) {
-            reject(err);
-          } else {
-            resolve(result.user);
-          }
-        },
-      );
+      userPool.signUp(email, password, null, null, (err, result) => {
+        if (!result) {
+          reject(err);
+        } else {
+          resolve(result.user);
+        }
+      });
     });
   }
-
 }
+
