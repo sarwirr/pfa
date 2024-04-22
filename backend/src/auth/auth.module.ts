@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { AwsCognitoService } from './aws-cognito/aws-cognito.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -24,4 +25,5 @@ const mongooseFeartures = [
   controllers: [AuthDistributorController, AuthPharmacyController],
   providers: [AwsCognitoService, AuthDistributorService, AuthPharmacyService],
 })
+
 export class AuthModule {}

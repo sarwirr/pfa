@@ -10,10 +10,6 @@ import { AuthRegisterUserDto } from '../dto/auth-registration.dto';
 @Injectable()
 export class AwsCognitoService {
   constructor() {
-    // this.userPool = new CognitoUserPool({
-    //   UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-    //   ClientId: process.env.AWS_COGNITO_CLIENT_ID,
-    // });
   }
 
   async authenticateUser(
@@ -24,6 +20,7 @@ export class AwsCognitoService {
     const userData = {
       Username: email,
       Pool: userPool,
+
     };
 
     const authenticationDetails = new AuthenticationDetails({
@@ -37,6 +34,7 @@ export class AwsCognitoService {
       userCognito.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
           resolve({
+
             accessToken: result.getAccessToken().getJwtToken(),
             refreshToken: result.getRefreshToken().getToken(),
           });
@@ -64,3 +62,4 @@ export class AwsCognitoService {
     });
   }
 }
+

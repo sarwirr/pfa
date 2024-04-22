@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+
 export type PharmacyDocument = Pharmacy & Document;
 
 @Schema()
@@ -20,8 +21,10 @@ export class Pharmacy {
 
   @Prop()
   clientId: string;
+
 }
 
 const PharmacySchema = SchemaFactory.createForClass(Pharmacy);
 
 export { PharmacySchema };
+

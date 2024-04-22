@@ -7,9 +7,12 @@ import { AuthModule } from './auth/auth.module';
 
 import * as dotenv from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
+
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './common/interceptor/interceptor.interceptor';
 import { DistributorModule } from './distributor/distributor.module';
+
+
 
 dotenv.config();
 @Module({
