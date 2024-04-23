@@ -11,8 +11,9 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './common/interceptor/interceptor.interceptor';
 import { DistributorModule } from './distributor/distributor.module';
-
-
+import { MedicineModule } from './medicine/medicine.module';
+import { StockModule } from './stock/stock.module';
+import { OrderModule } from './order/order.module';
 
 dotenv.config();
 
@@ -28,6 +29,9 @@ dotenv.config();
       isGlobal: true,
     }),
     DistributorModule,
+    MedicineModule,
+    StockModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [

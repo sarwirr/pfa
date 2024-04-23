@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { PharmacyService } from './pharmacy.service';
-import { CreatePharmacyDto } from './dto/create-pharmacy.dto';
-import { UpdatePharmacyDto } from './dto/update-pharmacy.dto';
 
 @Controller('pharmacy')
 export class PharmacyController {
@@ -9,38 +18,42 @@ export class PharmacyController {
 
   @Get()
   findAll() {
-    return this.pharmacyService.findAll();
+    const result = this.pharmacyService.getAll();
+    return { message: 'get all pharmacies', result: result };
   }
-
-  
 
   @Get('calculate-distance')
   async getDistance(
     @Query('origin') origin: string,
-    @Query('destination') destination: string
-  ): Promise<string> {
+    @Query('destination') destination: string,
+  ) {
     if (!origin || !destination) {
-      throw new HttpException('Origin and destination are required', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Origin and destination are required',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     try {
-      const distanceInfo = await this.pharmacyService.calculateDistance(origin, destination);
-      return distanceInfo;
+      const distanceInfo = await this.pharmacyService.calculateDistance(
+        origin,
+        destination,
+      );
+      return { message: 'Pharmacie distance', result: distanceInfo };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-@Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pharmacyService.findOne(id);
-  }
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePharmacyDto: UpdatePharmacyDto) {
-    return this.pharmacyService.update(id, updatePharmacyDto);
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    const result = this.pharmacyService.findById(id);
+    return { message: 'get pharmacie by id', result: result };
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pharmacyService.remove(id);
+  deleteById(@Param('id') id: string) {
+    const result = this.pharmacyService.deleteById(id);
+    return { message: 'Pharmacie removed by id', result: result };
   }
 }
