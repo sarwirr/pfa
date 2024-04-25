@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthLoginUserDto } from '../dto/auth-login.dto';
 import { AuthRegisterUserDto } from '../dto/auth-registration.dto';
 import { BaseauthService } from './baseauth.service';
+import { AuthGuard } from '@nestjs/passport';
 
 export class BaseauthController<T> {
   constructor(private baseauthService: BaseauthService<T>) {}
@@ -13,6 +14,7 @@ export class BaseauthController<T> {
   }
 
   @Post('/signup')
+  @UseGuards(AuthGuard('jwt'))
   async signup(@Body() authRegisterUserDto: AuthRegisterUserDto) {
     const result = await this.baseauthService.singup(authRegisterUserDto);
     return { message: 'SignUp result', result: result };

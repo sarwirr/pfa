@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Client</title>
+</head>
+
+<body>
+    <h1>Server-Sent Events (SSE) Client</h1>
+    <div id="events">
+        <h2>Events:</h2>
+        <ul id="event-list">
+        </ul>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const eventList = document.getElementById('event-list');
+
+            const source = new EventSource('http://127.0.0.1:3000/order/sse');
+
+            source.onmessage = function (event) {
+                console.log(event)
+                const data = JSON.parse(event.data);
+                const li = document.createElement('li');
+                console.log(data)
+                li.textContent = JSON.stringify(data);
+                eventList.appendChild(li);
+            };
+
+            source.onerror = function (error) {
+                console.error('EventSource error:', error);
+            };
+        });
+    </script>
+</body>
+
+</html>
