@@ -13,6 +13,12 @@ export interface Response<T> {
   data: {};
 }
 
+export const ExcludeTransformInterceptor =
+  () => (target: any, key: string, descriptor: PropertyDescriptor) => {
+    Reflect.defineMetadata('excludeInterceptor', true, descriptor.value);
+    return descriptor;
+  };
+
 @Injectable()
 export class TransformInterceptor<T>
   implements NestInterceptor<T, Response<T>>
@@ -21,6 +27,14 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
+    const isExcluded = Reflect.getMetadata(
+      'excludeInterceptor',
+      context.getHandler(),
+    );
+    if (isExcluded) {
+      return next.handle(); // Skip interception
+    }
+
     return next.handle().pipe(
       map((data) => ({
         statusCode: context.switchToHttp().getResponse().statusCode,

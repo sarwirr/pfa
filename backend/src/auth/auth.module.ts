@@ -14,6 +14,8 @@ import {
   DistributorSchema,
 } from 'src/distributor/entities/distributor.entity';
 import { AuthPharmacyService } from './auth-pharmacy/auth-pharmacy.service';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
 
 const mongooseFeartures = [
   { name: Pharmacy.name, schema: PharmacySchema },
@@ -21,9 +23,16 @@ const mongooseFeartures = [
 ];
 
 @Module({
-  imports: [MongooseModule.forFeature(mongooseFeartures)],
+  imports: [
+    MongooseModule.forFeature(mongooseFeartures),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   controllers: [AuthDistributorController, AuthPharmacyController],
-  providers: [AwsCognitoService, AuthDistributorService, AuthPharmacyService],
+  providers: [
+    AwsCognitoService,
+    AuthDistributorService,
+    AuthPharmacyService,
+    JwtStrategy,
+  ],
 })
-
 export class AuthModule {}
