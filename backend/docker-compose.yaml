@@ -1,5 +1,15 @@
 version: '3.8'
 services:
+
+  nestjs-app:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://admin:password@mongodb:27017
+
   mongodb:
     image: mongo
     ports:
