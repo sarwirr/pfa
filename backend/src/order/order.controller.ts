@@ -6,6 +6,7 @@ import { AddOrderDto } from './dto/add-order.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Observable, fromEvent, map } from 'rxjs';
 import { ExcludeTransformInterceptor } from 'src/common/interceptor/interceptor.interceptor';
+import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 
 interface MessageEvents {
   data: string | object;
@@ -14,6 +15,7 @@ interface MessageEvents {
   retry?: number;
 }
 
+@ApiTags('Order')
 @Controller('order')
 export class OrderController extends BaseController<Order> {
   constructor(
@@ -24,6 +26,9 @@ export class OrderController extends BaseController<Order> {
   }
 
   @Sse('sse')
+  @ApiOperation({
+    summary: 'Endpoint for sending notification from server to users',
+  })
   @ExcludeTransformInterceptor()
   sse(): Observable<MessageEvents> {
     return fromEvent(this.eventEmitter, 'neworder').pipe(
@@ -34,6 +39,9 @@ export class OrderController extends BaseController<Order> {
   }
 
   @Post('makeorder')
+  @ApiOperation({
+    summary: 'Endpoint for making a new order',
+  })
   makeOrder(@Body() order: AddOrderDto) {
     this.eventEmitter.emit('neworder', {
       message: 'hi',

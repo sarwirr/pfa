@@ -3,10 +3,14 @@ import { AuthLoginUserDto } from '../dto/auth-login.dto';
 import { AuthRegisterUserDto } from '../dto/auth-registration.dto';
 import { BaseauthService } from './baseauth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation } from '@nestjs/swagger';
 
 export class BaseauthController<T> {
   constructor(private baseauthService: BaseauthService<T>) {}
 
+  @ApiOperation({
+    summary: 'LoginIn Endpoint',
+  })
   @Post('/login')
   async login(@Body() authLoginUserDto: AuthLoginUserDto) {
     const result = await this.baseauthService.signin(authLoginUserDto);
@@ -14,6 +18,9 @@ export class BaseauthController<T> {
   }
 
   @Post('/signup')
+  @ApiOperation({
+    summary: 'Signup Endpoint',
+  })
   @UseGuards(AuthGuard('jwt'))
   async signup(@Body() authRegisterUserDto: AuthRegisterUserDto) {
     const result = await this.baseauthService.singup(authRegisterUserDto);

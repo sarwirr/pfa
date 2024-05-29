@@ -11,18 +11,22 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { PharmacyService } from './pharmacy.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Pharmacy')
 @Controller('pharmacy')
 export class PharmacyController {
   constructor(private readonly pharmacyService: PharmacyService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Find all pharmacies' })
   findAll() {
     const result = this.pharmacyService.getAll();
     return { message: 'get all pharmacies', result: result };
   }
 
   @Get('calculate-distance')
+  @ApiOperation({ summary: 'Get distance between pharmnacy and distibutors' })
   async getDistance(
     @Query('origin') origin: string,
     @Query('destination') destination: string,
@@ -46,12 +50,14 @@ export class PharmacyController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Find pharmacy by Id' })
   findById(@Param('id') id: string) {
     const result = this.pharmacyService.findById(id);
     return { message: 'get pharmacie by id', result: result };
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'delete pharmacy by Id' })
   deleteById(@Param('id') id: string) {
     const result = this.pharmacyService.deleteById(id);
     return { message: 'Pharmacie removed by id', result: result };
