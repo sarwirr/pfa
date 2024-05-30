@@ -20,8 +20,8 @@ export class PharmacyController {
 
   @Get()
   @ApiOperation({ summary: 'Find all pharmacies' })
-  findAll() {
-    const result = this.pharmacyService.getAll();
+  async findAll() {
+    const result = await this.pharmacyService.getAll();
     return { message: 'get all pharmacies', result: result };
   }
 

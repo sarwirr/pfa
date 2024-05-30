@@ -6,10 +6,10 @@ type Criteria<T> = FilterQuery<T>;
 export class BaseService<T> {
   constructor(private BaseModel: Model<T>, private baseDTO?) {}
 
-  async save(baseDto): Promise<T> {
+  async save(baseDto) {
     try {
       const entity = await this.BaseModel.create(baseDto);
-      return entity;
+      return entity.save();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

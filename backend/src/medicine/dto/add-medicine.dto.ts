@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { ObjectId } from 'mongoose';
 
 export class AddMedicineDTO {
   @ApiProperty()
@@ -21,4 +22,9 @@ export class AddMedicineDTO {
   @IsNotEmpty()
   @IsNumber()
   price: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  distributor: ObjectId;
 }
