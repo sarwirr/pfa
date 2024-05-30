@@ -4,7 +4,6 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsNumber,
-  IsObject,
   ValidateNested,
 } from 'class-validator';
 import { ObjectId } from 'mongoose';
@@ -18,7 +17,14 @@ class MedicineQuantityDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  quantity: Number;
+  quantity: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  medicineTotalPrice: number;
 }
 
 export class AddOrderDto {
@@ -32,9 +38,8 @@ export class AddOrderDto {
   @IsMongoId()
   distributor: ObjectId;
 
-  @ApiProperty({ type: () => MedicineQuantityDTO })
+  @ApiProperty({ type: () => [MedicineQuantityDTO] })
   @IsNotEmpty()
-  @IsObject()
   @ValidateNested({ each: true })
   @Type(() => MedicineQuantityDTO)
   medicine_quantity: MedicineQuantityDTO[];

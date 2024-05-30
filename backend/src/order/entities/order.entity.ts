@@ -16,18 +16,24 @@ export class Order {
   distributor: ObjectId;
 
   @Prop(
-    raw({
-      medicine: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' },
-      quantity: { type: Number },
-    }),
+    raw([
+      {
+        medicine: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' },
+        quantity: { type: Number },
+        medicineTotalPrice: { type: Number },
+      },
+    ]),
   )
-  medicine_quantity: Medicine_quantity;
+  medicine_quantity: Medicine_quantity[];
 
   @Prop({ default: false })
-  Confirmation: Boolean;
+  confirmation: Boolean;
 
-  @Prop({ type: String, enum: Orderstatus, default: Orderstatus.TODO })
+  @Prop({ type: String, enum: Orderstatus, default: Orderstatus.NotConfirmed })
   status: Orderstatus;
+
+  @Prop()
+  total_price: number;
 }
 
 const OrderSchema = SchemaFactory.createForClass(Order);

@@ -25,6 +25,7 @@ export class BaseController<T> {
   @Get('search')
   @ApiOperation({ summary: 'Get by criteria' })
   async getByCriteria(@Body() criteria: Criteria<T>) {
+    console.log(criteria);
     const result = await this.baseService.getByCriteria(criteria);
     return { message: 'getByCriteria', result: result };
   }

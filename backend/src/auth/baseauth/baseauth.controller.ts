@@ -21,7 +21,6 @@ export class BaseauthController<T> {
   @ApiOperation({
     summary: 'Signup Endpoint',
   })
-  @UseGuards(AuthGuard('jwt'))
   async signup(@Body() authRegisterUserDto: AuthRegisterUserDto) {
     const result = await this.baseauthService.singup(authRegisterUserDto);
     return { message: 'SignUp result', result: result };
