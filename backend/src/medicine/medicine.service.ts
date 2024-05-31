@@ -4,42 +4,39 @@ import { Medicine } from './entities/medicine.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { AddMedicineDTO } from './dto/add-medicine.dto';
+import { DmsService } from 'src/dms/dms.service';
 
 @Injectable()
 export class MedicineService extends BaseService<Medicine> {
   constructor(
     @InjectModel(Medicine.name)
     private readonly medicineModel: Model<Medicine>,
+    private readonly dmsService: DmsService,
   ) {
     super(medicineModel, AddMedicineDTO);
   }
 
-  async create(newMedicine: AddMedicineDTO) {
+  async create(newMedicine: AddMedicineDTO, file: Express.Multer.File) {
     try {
-      const medicines = await this.medicineModel.findOne({
+      const medicine = await this.medicineModel.findOne({
         name: newMedicine.name,
       });
-      if (!medicines) {
-        return this.save(newMedicine);
+      if (!medicine) {
+        const filepath = await this.dmsService.uploadSingleFile({
+          file,
+          isPublic: true,
+        });
+        const imagePath = filepath.url;
+        const medicineObject = {
+          ...newMedicine,
+          imageUrl: imagePath,
+        };
+        return this.save(medicineObject);
       } else {
-        const addedmedicine = await this.medicineModel.findByIdAndUpdate(
-          medicines['_id'],
-          { $push: { distributor: newMedicine.distributor } },
-          { new: true, useFindAndModify: false },
-        );
-        return addedmedicine;
+        throw new HttpException('Medicine already Exist', HttpStatus.CONFLICT);
       }
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
-  }
-
-  async getMedicineBydistributor(distributor_id: ObjectId) {
-    const medicines = await this.medicineModel
-      .find({
-        distributor: distributor_id,
-      })
-      .populate('distributor');
-    return medicines;
   }
 }

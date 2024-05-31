@@ -19,8 +19,8 @@ export class Medicine {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Distributor' })
-  distributor: ObjectId[];
+  @Prop()
+  imageUrl: string;
 }
 
 const MedicineSchema = SchemaFactory.createForClass(Medicine);

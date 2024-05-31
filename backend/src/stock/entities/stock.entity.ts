@@ -12,12 +12,14 @@ export class Stock {
   distributor: ObjectId;
 
   @Prop(
-    raw({
-      medicine: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' },
-      quantity: { type: Number },
-    }),
+    raw([
+      {
+        medicine: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine' },
+        quantity: { type: Number },
+      },
+    ]),
   )
-  medicine_quantity: Medicine_quantity;
+  medicine_quantity: Medicine_quantity[];
 }
 
 const StockSchema = SchemaFactory.createForClass(Stock);
