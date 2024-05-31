@@ -11,7 +11,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { PharmacyService } from './pharmacy.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
 
 @ApiTags('Pharmacy')
 @Controller('pharmacy')
@@ -23,6 +24,18 @@ export class PharmacyController {
   async findAll() {
     const result = await this.pharmacyService.getAll();
     return { message: 'get all pharmacies', result: result };
+  }
+
+  @Get('/distributor')
+  @ApiOperation({ summary: 'Find all distributors' })
+  @ApiQuery({
+    name: 'pharmacyId',
+    description: 'ID of the pharmacy',
+    type: 'objectId',
+  })
+  async getdistributor(@Query('pharmacyId') pharmacyId: ObjectId) {
+    const result = await this.pharmacyService.getdistributors(pharmacyId);
+    return { message: 'get all distributors', result: result };
   }
 
   @Get('calculate-distance')
