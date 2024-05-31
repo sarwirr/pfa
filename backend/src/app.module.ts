@@ -14,6 +14,7 @@ import { DistributorModule } from './distributor/distributor.module';
 import { MedicineModule } from './medicine/medicine.module';
 import { StockModule } from './stock/stock.module';
 import { OrderModule } from './order/order.module';
+import { DmsModule } from './dms/dms.module';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ dotenv.config();
     MedicineModule,
     StockModule,
     OrderModule,
+    DmsModule,
   ],
   controllers: [AppController],
   providers: [

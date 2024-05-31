@@ -20,11 +20,5 @@ export class AddMedicineDTO {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
   price: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsMongoId()
-  distributor: ObjectId;
 }

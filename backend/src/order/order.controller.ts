@@ -53,12 +53,13 @@ export class OrderController extends BaseController<Order> {
     summary: 'Endpoint for making order confirmation',
   })
   async orderConfirmation(
-    @Query('confirmation') confirmation: boolean,
+    @Query('confirmation') confirmation: string,
     @Query('orderId') orderId: ObjectId,
   ) {
+    const confirmationStatus = confirmation === 'true' ? true : false;
     const result = await this.orderService.orderConfirmation(
       orderId,
-      confirmation,
+      confirmationStatus,
     );
     return { message: 'Order Confirmation', result: result };
   }
