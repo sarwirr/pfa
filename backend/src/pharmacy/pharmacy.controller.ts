@@ -41,13 +41,9 @@ export class PharmacyController {
 
   @Get('/distributor')
   @ApiOperation({ summary: 'Find all distributors' })
-  @ApiQuery({
-    name: 'clientId',
-    description: 'ID of the pharmacy',
-    type: 'string',
-  })
-  async getdistributor(@Query('clientId') clientId: string) {
-    const result = await this.pharmacyService.getdistributors(clientId);
+  @UseGuards(PharmacyAccessGuard)
+  async getdistributor(@Pharmacy('client_id') client_id: string) {
+    const result = await this.pharmacyService.getdistributors(client_id);
     return { message: 'get all distributors', result: result };
   }
 
