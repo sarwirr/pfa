@@ -9,10 +9,12 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { PharmacyService } from './pharmacy.service';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ObjectId } from 'mongoose';
+import { PharmacyAccessGuard } from './guard/pharmacy.guard';
+import { Pharmacy } from './decorator/pharmacy.decorator';
 
 @ApiTags('Pharmacy')
 @Controller('pharmacy')
@@ -20,6 +22,17 @@ export class PharmacyController {
   constructor(private readonly pharmacyService: PharmacyService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Find pharmacy by Id' })
+  @UseGuards(PharmacyAccessGuard)
+  async findById(@Pharmacy('client_id') pharmacyclientId: string) {
+    console.log(pharmacyclientId);
+    const result = await this.pharmacyService.findPharmacyById(
+      pharmacyclientId,
+    );
+    return { message: 'get pharmacie by id', result: result };
+  }
+
+  @Get('/all')
   @ApiOperation({ summary: 'Find all pharmacies' })
   async findAll() {
     const result = await this.pharmacyService.getAll();
@@ -29,12 +42,12 @@ export class PharmacyController {
   @Get('/distributor')
   @ApiOperation({ summary: 'Find all distributors' })
   @ApiQuery({
-    name: 'pharmacyId',
+    name: 'clientId',
     description: 'ID of the pharmacy',
-    type: 'objectId',
+    type: 'string',
   })
-  async getdistributor(@Query('pharmacyId') pharmacyId: ObjectId) {
-    const result = await this.pharmacyService.getdistributors(pharmacyId);
+  async getdistributor(@Query('clientId') clientId: string) {
+    const result = await this.pharmacyService.getdistributors(clientId);
     return { message: 'get all distributors', result: result };
   }
 
@@ -60,13 +73,6 @@ export class PharmacyController {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Find pharmacy by Id' })
-  findById(@Param('id') id: string) {
-    const result = this.pharmacyService.findById(id);
-    return { message: 'get pharmacie by id', result: result };
   }
 
   @Delete(':id')

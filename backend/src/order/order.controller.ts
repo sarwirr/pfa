@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, Sse } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Sse,
+  UseGuards,
+} from '@nestjs/common';
 import { BaseController } from 'src/base/base.controller';
 import { Order } from './entities/order.entity';
 import { OrderService } from './order.service';
@@ -6,8 +14,10 @@ import { AddOrderDto } from './dto/add-order.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Observable, fromEvent, map } from 'rxjs';
 import { ExcludeTransformInterceptor } from 'src/common/interceptor/interceptor.interceptor';
-import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
+import { PharmacyAccessGuard } from 'src/pharmacy/guard/pharmacy.guard';
+import { Pharmacy } from 'src/pharmacy/decorator/pharmacy.decorator';
 
 interface MessageEvents {
   data: string | object;
@@ -30,7 +40,8 @@ export class OrderController extends BaseController<Order> {
   @ApiOperation({
     summary: 'Endpoint for getting all orders of a pharmacy',
   })
-  async getOrderByPharmacy(@Query('pharmacyId') pharmacyId: ObjectId) {
+  @UseGuards(PharmacyAccessGuard)
+  async getOrderByPharmacy(@Pharmacy('client_id') pharmacyId: string) {
     const result = await this.orderService.getorderByPharmacy(pharmacyId);
     return { message: 'get all orders of a pharmacy', result: result };
   }
