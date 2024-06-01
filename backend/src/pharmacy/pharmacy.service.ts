@@ -43,10 +43,12 @@ export class PharmacyService extends BaseService<Pharmacy> {
     }
   }
 
-  async getdistributors(pharmacyId: ObjectId) {
+  async getdistributors(clientId: string) {
     try {
       const distributors = await this.distributorModel.find();
-      const pharmacy = await this.pharmacyModel.findById(pharmacyId);
+      const pharmacy = await this.pharmacyModel.findOne({
+        clientId: clientId,
+      });
       if (pharmacy && distributors) {
         const pharmacyAddress = pharmacy.address;
         let distributorList = [];
@@ -74,6 +76,17 @@ export class PharmacyService extends BaseService<Pharmacy> {
           'there is no distributor or pharmacy with this object Id',
         );
       }
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findPharmacyById(pharmacyClientId: string) {
+    try {
+      const pharmacie = await this.pharmacyModel.findOne({
+        clientId: pharmacyClientId,
+      });
+      return pharmacie;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

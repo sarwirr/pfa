@@ -41,7 +41,7 @@ export class OrderService extends BaseService<Order> {
     }
   }
 
-  async getorderByPharmacy(pharmacy_id: ObjectId) {
+  async getorderByPharmacy(pharmacy_id: string) {
     try {
       const orders = await this.orderModel
         .find({ pharmacy: pharmacy_id })
