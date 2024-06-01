@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    environment {
+        // Set NODE_ENV for production builds
+        NODE_ENV = 'production'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from your GitHub repository
+                git branch: 'main', url: 'https://github.com/sarwirr/pfa'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('backend') {
+                    // Install npm dependencies
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Load Environment Variables') {
+            steps {
+                dir('backend') {
+                    // Load environment variables from .env file
+                    script {
+                        def envFile = readFile('.env')
+                        envFile.split('\n').each { line ->
+                            def keyVal = line.split('=')
+                            if (keyVal.length == 2) {
+                                env[keyVal[0]] = keyVal[1].trim()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('backend') {
+                    // Build the NestJS project
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('backend') {
+                    // Run unit tests
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                dir('backend') {
+                    // Run linter to check for code quality issues
+                    sh 'npm run lint'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Add deployment steps here
+                echo 'Deploying application...'
+                // Example deployment command:
+                // sh 'scp -r dist/ user@yourserver:/path/to/deploy'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup workspace
+            cleanWs()
+        }
+        success {
+            // Notify success, if needed
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            // Notify failure, if needed
+            echo 'Build or deployment failed.'
+        }
+    }
+}
