@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddMedicineDTO } from './dto/add-medicine.dto';
 import { DmsService } from 'src/dms/dms.service';
-import 'multer';
+import { Express } from 'express';
 
 @Injectable()
 export class MedicineService extends BaseService<Medicine> {
