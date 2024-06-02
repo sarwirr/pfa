@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { BaseService } from 'src/base/base.service';
 import { Medicine } from './entities/medicine.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { AddMedicineDTO } from './dto/add-medicine.dto';
 import { DmsService } from 'src/dms/dms.service';
 
