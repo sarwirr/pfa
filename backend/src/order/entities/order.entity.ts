@@ -9,8 +9,8 @@ export type OrderDocument = Order & Document;
 export class Order {
   _id;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Pharmacy' })
-  pharmacy: ObjectId;
+  @Prop({ type: String, ref: 'Pharmacy' })
+  pharmacy: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Distributor' })
   distributor: ObjectId;
