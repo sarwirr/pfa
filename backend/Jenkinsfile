@@ -16,7 +16,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'npm install'
-                    sh 'npm install --dev '
+                    sh 'npm install --only=dev'
                 }
             }
         }
