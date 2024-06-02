@@ -79,11 +79,19 @@ export class OrderController extends BaseController<Order> {
   @ApiOperation({
     summary: 'Endpoint for making a new order',
   })
-  async makeOrder(@Body() order: AddOrderDto) {
+  @UseGuards(PharmacyAccessGuard)
+  async makeOrder(
+    @Pharmacy('client_id') clientId: string,
+    @Body() order: AddOrderDto,
+  ) {
+    const neworder = {
+      ...order,
+      pharmacy: clientId,
+    };
     this.eventEmitter.emit('neworder', {
       message: 'hi',
     });
-    const result = await this.orderService.makeOrder(order);
+    const result = await this.orderService.makeOrder(neworder);
     return { message: 'make order', result: result };
   }
 }

@@ -28,10 +28,10 @@ class MedicineQuantityDTO {
 }
 
 export class AddOrderDto {
-  @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
-  @IsNotEmpty()
-  @IsMongoId()
-  pharmacy: ObjectId;
+  // @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
+  // @IsNotEmpty()
+  // @IsMongoId()
+  // pharmacy: ObjectId;
 
   @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
   @IsNotEmpty()

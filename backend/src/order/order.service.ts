@@ -45,7 +45,7 @@ export class OrderService extends BaseService<Order> {
     try {
       const orders = await this.orderModel
         .find({ pharmacy: pharmacy_id })
-        .populate(['medicine_quantity.medicine', 'distributor', 'pharmacy'])
+        .populate(['medicine_quantity.medicine', 'distributor'])
         .exec();
       return orders;
     } catch (error) {
