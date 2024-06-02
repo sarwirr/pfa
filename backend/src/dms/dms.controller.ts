@@ -13,12 +13,13 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DmsService } from './dms.service';
-
+import { Express } from 'express';
+import 'multer';
 @Controller('dms')
 export class DmsController {
   constructor(private readonly dmsService: DmsService) {}
 
-  @Post('/file')
+  @Post('/file')  
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile(

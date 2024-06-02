@@ -17,7 +17,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
-
+import 'multer';
 @ApiTags('Medicine')
 @Controller('medicine')
 export class MedicineController extends BaseController<Medicine> {
