@@ -16,7 +16,7 @@ pipeline {
             steps {
                 dir('backend') {
                     sh 'npm install'
-                    sh 'npm install --save-dev @types/express @types/multer'
+                    sh 'npm install --dev '
                 }
             }
         }
