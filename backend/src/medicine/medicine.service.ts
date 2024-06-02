@@ -5,7 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddMedicineDTO } from './dto/add-medicine.dto';
 import { DmsService } from 'src/dms/dms.service';
-import 'multer';
+import { MulterFile } from 'src/common/types/type';
+
 
 @Injectable()
 export class MedicineService extends BaseService<Medicine> {
@@ -17,7 +18,7 @@ export class MedicineService extends BaseService<Medicine> {
     super(medicineModel, AddMedicineDTO);
   }
 
-  async create(newMedicine: AddMedicineDTO, file: Express.Multer.File) {
+  async create(newMedicine: AddMedicineDTO, file: MulterFile) {
     try {
       const medicine = await this.medicineModel.findOne({
         name: newMedicine.name,

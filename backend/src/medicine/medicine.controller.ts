@@ -17,7 +17,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
-import 'multer';
+import { MulterFile } from 'src/common/types/type';
+
 @ApiTags('Medicine')
 @Controller('medicine')
 export class MedicineController extends BaseController<Medicine> {
@@ -37,7 +38,7 @@ export class MedicineController extends BaseController<Medicine> {
         fileIsRequired: true,
       }),
     )
-    file: Express.Multer.File,
+    file: MulterFile,
     @Body() medicine: AddMedicineDTO,
   ) {
     console.log(typeof medicine.price);

@@ -14,7 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { DmsService } from './dms.service';
 import { Express } from 'express';
-import 'multer';
+import { MulterFile } from 'src/common/types/type';
 @Controller('dms')
 export class DmsController {
   constructor(private readonly dmsService: DmsService) {}
@@ -28,7 +28,7 @@ export class DmsController {
         fileIsRequired: true,
       }),
     )
-    file: Express.Multer.File,
+    file: MulterFile,
     @Body('isPublic') isPublic: string,
   ) {
     const isPublicBool = isPublic === 'true' ? true : false;
