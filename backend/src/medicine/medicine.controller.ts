@@ -16,6 +16,7 @@ import { AddMedicineDTO } from './dto/add-medicine.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
+import 'multer';
 
 @ApiTags('Medicine')
 @Controller('medicine')
