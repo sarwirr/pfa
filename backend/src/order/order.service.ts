@@ -53,6 +53,18 @@ export class OrderService extends BaseService<Order> {
     }
   }
 
+  async getorderByDistributor(distributor_id: string) {
+    try {
+      const orders = await this.orderModel
+        .find({ distributor: distributor_id })
+        .populate(['medicine_quantity.medicine', 'pharmacy'])
+        .exec();
+      return orders;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async orderConfirmation(orderId: ObjectId, confirmationStatus: boolean) {
     try {
       const order = await this.orderModel.findById(orderId);

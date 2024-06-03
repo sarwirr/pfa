@@ -14,10 +14,10 @@ export class StockService extends BaseService<Stock> {
     super(stockModel, AddStockDTO);
   }
 
-  async getStockByDistributor(distributor_id: ObjectId) {
+  async getStockByDistributor(client_id: string) {
     try {
       const stock = (
-        await this.stockModel.findOne({ distributor: distributor_id })
+        await this.stockModel.findOne({ distributor: client_id })
       ).populate(['distributor', 'medicine_quantity.medicine']);
       return stock;
     } catch (error) {

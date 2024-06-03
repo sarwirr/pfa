@@ -22,11 +22,6 @@ class MedicineQuantityDTO {
 }
 
 export class AddStockDTO {
-  @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
-  @IsNotEmpty()
-  @IsMongoId()
-  distributor: ObjectId;
-
   @ApiProperty({ type: () => MedicineQuantityDTO })
   @IsNotEmpty()
   @ValidateNested({ each: true })

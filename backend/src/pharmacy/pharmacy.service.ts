@@ -31,6 +31,7 @@ export class PharmacyService extends BaseService<Pharmacy> {
         const distance = response.data.rows[0].elements[0].distance.text;
         const duration = response.data.rows[0].elements[0].duration.text;
         const phrase = `The distance between the two locations is ${distance} and it takes approximately ${duration}.`;
+        console.log('address: ', destination);
         return { distance: distance, duration: duration };
       } else {
         return `Failed to calculate distance with status: ${response.data.status}`;

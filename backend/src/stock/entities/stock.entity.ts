@@ -8,8 +8,8 @@ export type StockDocument = Stock & Document;
 export class Stock {
   _id;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Distributor' })
-  distributor: ObjectId;
+  @Prop({ type: String, ref: 'Distributor' })
+  distributor: string;
 
   @Prop(
     raw([

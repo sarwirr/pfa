@@ -14,10 +14,12 @@ import { AddOrderDto } from './dto/add-order.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Observable, fromEvent, map } from 'rxjs';
 import { ExcludeTransformInterceptor } from 'src/common/interceptor/interceptor.interceptor';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectId } from 'mongoose';
 import { PharmacyAccessGuard } from 'src/pharmacy/guard/pharmacy.guard';
 import { Pharmacy } from 'src/pharmacy/decorator/pharmacy.decorator';
+import { DistributorAccessGuard } from 'src/distributor/guard/distributor.guard';
+import { DistributorDec } from 'src/distributor/decorator/distributor.decorator';
 
 interface MessageEvents {
   data: string | object;
@@ -46,6 +48,18 @@ export class OrderController extends BaseController<Order> {
     return { message: 'get all orders of a pharmacy', result: result };
   }
 
+  @Get('distributor')
+  @ApiOperation({
+    summary: 'Endpoint for getting all orders of a pharmacy',
+  })
+  @UseGuards(DistributorAccessGuard)
+  async getOrderByDistributor(
+    @DistributorDec('client_id') distributorId: string,
+  ) {
+    const result = await this.orderService.getorderByDistributor(distributorId);
+    return { message: 'get all orders of a pharmacy', result: result };
+  }
+
   @Sse('sse')
   @ApiOperation({
     summary: 'Endpoint for sending notification from server to users',
@@ -62,6 +76,16 @@ export class OrderController extends BaseController<Order> {
   @Get('confirmation')
   @ApiOperation({
     summary: 'Endpoint for making order confirmation',
+  })
+  @ApiQuery({
+    name: 'confirmation',
+    description: 'order confirmation the value need to be true or false',
+    type: 'string',
+  })
+  @ApiQuery({
+    name: 'orderId',
+    description: 'order Id',
+    type: 'ObjectId',
   })
   async orderConfirmation(
     @Query('confirmation') confirmation: string,

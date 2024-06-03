@@ -17,9 +17,9 @@ export class DistributorAccessGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const verifier = CognitoJwtVerifier.create({
-      userPoolId: process.env.AWS_COGNITO_USER_POOL_ID_Pharmacy,
+      userPoolId: process.env.AWS_COGNITO_USER_POOL_ID_Distributor,
       tokenUse: 'access',
-      clientId: process.env.AWS_COGNITO_CLIENT_ID_Pharmacy,
+      clientId: process.env.AWS_COGNITO_CLIENT_ID_Distributor,
     });
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
