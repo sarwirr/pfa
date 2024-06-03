@@ -6,6 +6,7 @@ import { BaseService } from 'src/base/base.service';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { Distributor } from 'src/distributor/entities/distributor.entity';
+import { getCoordinates } from 'src/common/helpers/location';
 
 @Injectable()
 export class PharmacyService extends BaseService<Pharmacy> {
@@ -25,7 +26,6 @@ export class PharmacyService extends BaseService<Pharmacy> {
 
     try {
       const response = await firstValueFrom(this.httpService.get(url)); // Updated to use firstValueFrom
-      // console.log('API Response:', JSON.stringify(response.data, null, 2)); // Log the full response
 
       if (response.data.status === 'OK') {
         const distance = response.data.rows[0].elements[0].distance.text;
@@ -59,17 +59,19 @@ export class PharmacyService extends BaseService<Pharmacy> {
             pharmacyAddress,
             distributorAddress,
           );
+          const coordinates = await getCoordinates(
+            distributorAddress,
+            this.httpService,
+          );
           const distrib = {
             distributor: distributor,
             distance: distance,
+            coordinates: coordinates,
           };
-          console.log(distrib);
           return distrib;
         });
 
         distributorList = await Promise.all(distributorPromises);
-
-        console.log(distributorList);
         return distributorList;
       } else {
         throw new Error(
@@ -83,10 +85,18 @@ export class PharmacyService extends BaseService<Pharmacy> {
 
   async findPharmacyById(pharmacyClientId: string) {
     try {
-      const pharmacie = await this.pharmacyModel.findOne({
+      const pharmacy = await this.pharmacyModel.findOne({
         clientId: pharmacyClientId,
       });
-      return pharmacie;
+      const coordinates = await getCoordinates(
+        pharmacy.address,
+        this.httpService,
+      );
+      const newpharmacy = {
+        pharmacy,
+        coordinates: coordinates,
+      };
+      return newpharmacy;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

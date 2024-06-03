@@ -10,7 +10,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { v4 as uuidv4 } from 'uuid';
 import { MulterFile } from 'src/common/types/type';
 
-
 @Injectable()
 export class DmsService {
   private client: S3Client;
@@ -65,7 +64,7 @@ export class DmsService {
   }
 
   async getFileUrl(key: string) {
-    return { url: `https://${this.bucketName}.s3.amazonaws.com/${key}` };
+    return { url: `http://${this.bucketName}.s3.amazonaws.com/${key}` };
   }
 
   async getPresignedSignedUrl(key: string) {
