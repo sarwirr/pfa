@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { ObjectId } from 'mongoose';
 
-class MedicineQuantityDTO {
+export class MedicineQuantityDTO {
   @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
   @IsNotEmpty()
   @IsMongoId()
@@ -18,7 +18,7 @@ class MedicineQuantityDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  quantity: Number;
+  quantity: number;
 }
 
 export class AddStockDTO {

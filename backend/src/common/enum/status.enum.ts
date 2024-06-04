@@ -3,4 +3,5 @@ export enum Orderstatus {
   InPreparing = 'InPreparing',
   Done = 'DONE',
   Refused = 'Refused',
+  Delivery = 'Delivery',
 }

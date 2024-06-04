@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Query,
   Sse,
   UseGuards,
@@ -62,7 +63,8 @@ export class OrderController extends BaseController<Order> {
 
   @Sse('sse')
   @ApiOperation({
-    summary: 'Endpoint for sending notification from server to users',
+    summary:
+      'Endpoint for sending notification from server to distributor for informing creation of new order',
   })
   @ExcludeTransformInterceptor()
   sse(): Observable<MessageEvents> {
@@ -73,7 +75,21 @@ export class OrderController extends BaseController<Order> {
     );
   }
 
-  @Get('confirmation')
+  @Sse('confirmationMessage')
+  @ApiOperation({
+    summary:
+      'Endpoint for sending notification from server to pharmacy for sending confirmation result',
+  })
+  @ExcludeTransformInterceptor()
+  confirmation(): Observable<MessageEvents> {
+    return fromEvent(this.eventEmitter, 'confirmation result').pipe(
+      map((data) => {
+        return { data: { response: data } };
+      }),
+    );
+  }
+
+  @Put('confirmation')
   @ApiOperation({
     summary: 'Endpoint for making order confirmation',
   })
@@ -96,7 +112,33 @@ export class OrderController extends BaseController<Order> {
       orderId,
       confirmationStatus,
     );
+    if (confirmationStatus) {
+      this.eventEmitter.emit('confirmation result', {
+        message: `The distributor has confirmed your order and it is under preparation`,
+      });
+    } else {
+      this.eventEmitter.emit('confirmation result', {
+        message: `The distributor has refused your order to check this contact him`,
+      });
+    }
     return { message: 'Order Confirmation', result: result };
+  }
+
+  @Put('delivery')
+  @ApiOperation({
+    summary: 'Endpoint for delivery status',
+  })
+  @ApiQuery({
+    name: 'orderId',
+    description: 'order Id',
+    type: 'ObjectId',
+  })
+  async orderDelivery(@Query('orderId') orderId: ObjectId) {
+    const result = await this.orderService.orderdelevery(orderId);
+    this.eventEmitter.emit('confirmation result', {
+      message: `Your order is coming to you`,
+    });
+    return { message: 'Order Delivery', result: result };
   }
 
   @Post('makeorder')
@@ -112,10 +154,10 @@ export class OrderController extends BaseController<Order> {
       ...order,
       pharmacy: clientId,
     };
-    this.eventEmitter.emit('neworder', {
-      message: 'hi',
-    });
     const result = await this.orderService.makeOrder(neworder);
+    this.eventEmitter.emit('neworder', {
+      message: `An order from the ${clientId} has come to you`,
+    });
     return { message: 'make order', result: result };
   }
 }

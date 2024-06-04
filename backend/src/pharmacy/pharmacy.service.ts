@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { Pharmacy } from './entities/pharmacy.entity';
 import { BaseService } from 'src/base/base.service';
 import { HttpService } from '@nestjs/axios';
