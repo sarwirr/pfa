@@ -5,12 +5,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { AddOrderDto } from './dto/add-order.dto';
 import { Orderstatus } from 'src/common/enum/status.enum';
+import { Distributor } from 'src/distributor/entities/distributor.entity';
+import { Pharmacy } from 'src/pharmacy/entities/pharmacy.entity';
 
 @Injectable()
 export class OrderService extends BaseService<Order> {
   constructor(
     @InjectModel(Order.name)
     private readonly orderModel: Model<Order>,
+    @InjectModel(Distributor.name)
+    private readonly distributorModel: Model<Distributor>,
+    @InjectModel(Pharmacy.name)
+    private readonly pharmacyModel: Model<Pharmacy>,
   ) {
     super(orderModel, AddOrderDto);
   }
@@ -47,7 +53,19 @@ export class OrderService extends BaseService<Order> {
         .find({ pharmacy: pharmacy_id })
         .populate(['medicine_quantity.medicine'])
         .exec();
-      return orders;
+      let returnedorder = [];
+      const returnedorderPromises = orders.map(async (order) => {
+        const distributor = await this.distributorModel.findOne({
+          clientId: order.distributor,
+        });
+        const neworder = {
+          ...order['_doc'],
+          distributor: distributor,
+        };
+        return neworder;
+      });
+      returnedorder = await Promise.all(returnedorderPromises);
+      return returnedorder;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -59,6 +77,19 @@ export class OrderService extends BaseService<Order> {
         .find({ distributor: distributor_id })
         .populate(['medicine_quantity.medicine'])
         .exec();
+      let returnedorder = [];
+      const returnedorderPromises = orders.map(async (order) => {
+        const pharmacy = await this.pharmacyModel.findOne({
+          clientId: order.pharmacy,
+        });
+        const neworder = {
+          ...order['_doc'],
+          pharmacy: pharmacy,
+        };
+        return neworder;
+      });
+      returnedorder = await Promise.all(returnedorderPromises);
+      return returnedorder;
       return orders;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
