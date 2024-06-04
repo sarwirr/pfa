@@ -12,8 +12,8 @@ export class Order {
   @Prop({ type: String, ref: 'Pharmacy' })
   pharmacy: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Distributor' })
-  distributor: ObjectId;
+  @Prop({ type: String, ref: 'Distributor' })
+  distributor: string;
 
   @Prop(
     raw([

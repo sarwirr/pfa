@@ -18,6 +18,8 @@ export class StockService extends BaseService<Stock> {
 
   async getStockByDistributor(client_id: string): Promise<Stock> {
     try {
+      console.log(client_id)
+      console.log(await this.stockModel.findOne({ distributor: client_id }))
       const stock = (
         await this.stockModel.findOne({ distributor: client_id })
       ).populate(['medicine_quantity.medicine']);
@@ -41,7 +43,7 @@ export class StockService extends BaseService<Stock> {
         const stockMedicines = stock.medicine_quantity;
         let modified = false;
         for (let i = 0; i < stockMedicines.length; i++) {
-          if (stockMedicines[i].medicine === medicineId) {
+          if (stockMedicines[i].medicine == medicineId) {
             (stockMedicines[i].quantity as number) += quantity;
             modified = true;
             break;

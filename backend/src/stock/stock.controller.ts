@@ -23,6 +23,13 @@ export class StockController extends BaseController<Stock> {
     super(stockService);
   }
 
+  @Get('pharmacy/distributor')
+  @ApiOperation({ summary: 'Get distributor stock' })
+  async getPharmacyDistributor(@Query('distributor_id') distributorId: string) {
+    const result = await this.stockService.getStockByDistributor(distributorId);
+    return { message: 'Distributor Stock', result: result };
+  }
+
   @Get('distributor')
   @ApiOperation({ summary: 'Get distributor stock' })
   @UseGuards(DistributorAccessGuard)
