@@ -12,7 +12,7 @@ class MedicineQuantityDTO {
   @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
   @IsNotEmpty()
   @IsMongoId()
-  medicine: ObjectId;
+  medicine: string;
 
   @ApiProperty()
   @IsNotEmpty()

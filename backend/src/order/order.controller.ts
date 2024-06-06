@@ -124,6 +124,26 @@ export class OrderController extends BaseController<Order> {
     return { message: 'Order Confirmation', result: result };
   }
 
+  @Put('done')
+  @ApiOperation({
+    summary: 'Endpoint for delivery status',
+  })
+  @ApiQuery({
+    name: 'orderId',
+    description: 'order Id',
+    type: 'ObjectId',
+  })
+  async ConfirmeDelivery(@Query('orderId') orderId: ObjectId) {
+    const result = await this.orderService.orderConfirme(orderId);
+    this.eventEmitter.emit('confirmation result', {
+      message: `Your order is coming to you`,
+    });
+    return {
+      message: 'Order Delivery',
+      result: result,
+    };
+  }
+
   @Put('delivery')
   @ApiOperation({
     summary: 'Endpoint for delivery status',

@@ -132,4 +132,19 @@ export class OrderService extends BaseService<Order> {
       }
     } catch (error) {}
   }
+
+  async orderConfirme(orderId: ObjectId) {
+    try {
+      const order = await this.orderModel.findById(orderId);
+      if (!order) {
+        throw new HttpException(
+          'There is no order with this orderId',
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        order.status = Orderstatus.Done;
+        return await order.save();
+      }
+    } catch (error) {}
+  }
 }
