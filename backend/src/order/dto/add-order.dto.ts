@@ -36,7 +36,7 @@ export class AddOrderDto {
   @ApiProperty({ type: String, description: 'Mongoose ObjectId' })
   @IsNotEmpty()
   @IsMongoId()
-  distributor: ObjectId;
+  distributor: string;
 
   @ApiProperty({ type: () => [MedicineQuantityDTO] })
   @IsNotEmpty()

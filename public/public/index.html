@@ -18,7 +18,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const eventList = document.getElementById('event-list');
 
-            const source = new EventSource('http://127.0.0.1:3000/order/sse');
+            const source = new EventSource('http://172.201.204.133:3000/order/confirmationMessage');
 
             source.onmessage = function (event) {
                 console.log(event)
